@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { TwitterIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
+import { LinkedinIcon } from '@/components/ui/SocialIcons';
 import { Link as LinkIcon, Check, Share2 } from 'lucide-react';
 
 interface BlogShareButtonsProps {
@@ -19,12 +19,6 @@ export function BlogShareButtons({ title, slug }: BlogShareButtonsProps) {
     return `https://praveshvibes.com/blog/${slug}`;
   };
 
-  const shareOnTwitter = () => {
-    const url = getShareUrl();
-    const text = encodeURIComponent(`"${title}" by @praveshvibes\n${url}`);
-    window.open(`https://twitter.com/intent/tweet?text=${text}`, '_blank');
-  };
-
   const shareOnLinkedIn = () => {
     const url = encodeURIComponent(getShareUrl());
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
@@ -39,16 +33,6 @@ export function BlogShareButtons({ title, slug }: BlogShareButtonsProps) {
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs font-semibold text-[var(--subtle-text)] hidden sm:inline">Share:</span>
-      
-      <button
-        type="button"
-        onClick={shareOnTwitter}
-        aria-label="Share on Twitter"
-        className="w-8 h-8 rounded-lg glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#1DA1F2] transition-colors cursor-pointer"
-        title="Share on Twitter/X"
-      >
-        <TwitterIcon className="w-3.5 h-3.5" />
-      </button>
 
       <button
         type="button"

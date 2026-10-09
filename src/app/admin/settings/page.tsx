@@ -17,6 +17,8 @@ import {
 export default function AdminSettingsPage() {
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -30,9 +32,35 @@ export default function AdminSettingsPage() {
     e.preventDefault();
     if (!settings) return;
 
-    await updateSiteSettings(settings);
-    setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 2500);
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+
+      // Sanitize and format GitHub & LinkedIn URLs
+      const formatUrl = (url: string | undefined, defaultUrl: string) => {
+        if (!url || !url.trim()) return defaultUrl;
+        const cleaned = url.trim();
+        if (cleaned.startsWith('http://') || cleaned.startsWith('https://')) return cleaned;
+        return `https://${cleaned.replace(/^\/+/, '')}`;
+      };
+
+      const formattedSettings: SiteSettings = {
+        ...settings,
+        github_url: formatUrl(settings.github_url, 'https://github.com/praveshgrewal'),
+        linkedin_url: formatUrl(settings.linkedin_url, 'https://linkedin.com/in/praveshgrewal'),
+      };
+
+      await updateSiteSettings(formattedSettings);
+      setSettings(formattedSettings);
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3500);
+    } catch (err: unknown) {
+      console.error('Save error:', err);
+      const message = err instanceof Error ? err.message : 'Failed to save settings. Please try again.';
+      setSaveError(message);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   if (!settings) {
@@ -63,6 +91,12 @@ export default function AdminSettingsPage() {
         <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 text-xs font-bold flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4" />
           <span>Profile and site settings successfully saved! Changes take effect immediately across all pages.</span>
+        </div>
+      )}
+
+      {saveError && (
+        <div className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-bold flex items-center gap-2">
+          <span>{saveError}</span>
         </div>
       )}
 
@@ -215,41 +249,31 @@ export default function AdminSettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">GitHub Profile</label>
+              <label className="text-xs font-bold text-[var(--subtle-text)] flex items-center justify-between">
+                <span>GitHub Profile URL</span>
+                <span className="text-[10px] text-[var(--primary)]">e.g. https://github.com/praveshgrewal</span>
+              </label>
               <input
-                type="url"
-                value={settings.github_url}
+                type="text"
+                required
+                placeholder="https://github.com/praveshgrewal"
+                value={settings.github_url || ''}
                 onChange={(e) => setSettings({ ...settings, github_url: e.target.value })}
                 className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
               />
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">LinkedIn Profile</label>
+              <label className="text-xs font-bold text-[var(--subtle-text)] flex items-center justify-between">
+                <span>LinkedIn Profile URL</span>
+                <span className="text-[10px] text-[#0077B5]">e.g. https://linkedin.com/in/praveshgrewal</span>
+              </label>
               <input
-                type="url"
-                value={settings.linkedin_url}
+                type="text"
+                required
+                placeholder="https://linkedin.com/in/praveshgrewal"
+                value={settings.linkedin_url || ''}
                 onChange={(e) => setSettings({ ...settings, linkedin_url: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">Twitter / X Profile</label>
-              <input
-                type="url"
-                value={settings.twitter_url}
-                onChange={(e) => setSettings({ ...settings, twitter_url: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">YouTube Channel</label>
-              <input
-                type="url"
-                value={settings.youtube_url}
-                onChange={(e) => setSettings({ ...settings, youtube_url: e.target.value })}
                 className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
               />
             </div>
@@ -272,10 +296,11 @@ export default function AdminSettingsPage() {
 
           <button
             type="submit"
-            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white hover:opacity-95 shadow-md transition-all cursor-pointer"
+            disabled={isSaving}
+            className="inline-flex items-center gap-2 px-8 py-3 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] text-white hover:opacity-95 shadow-md transition-all cursor-pointer disabled:opacity-50"
           >
-            <Save className="w-4 h-4" />
-            <span>Save Profile Settings</span>
+            <Save className={`w-4 h-4 ${isSaving ? 'animate-spin' : ''}`} />
+            <span>{isSaving ? 'Saving Settings...' : 'Save Profile Settings'}</span>
           </button>
         </div>
 

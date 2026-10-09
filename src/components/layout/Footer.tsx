@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   CheckCircle2
 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from '@/components/ui/SocialIcons';
+import { GithubIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
 
 import { useState, useEffect } from 'react';
 
@@ -56,7 +56,7 @@ export function Footer() {
             {/* Social Icons */}
             <div className="flex items-center gap-2.5 pt-2">
               <a
-                href="https://github.com"
+                href="https://github.com/praveshgrewal"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="GitHub Profile"
@@ -65,31 +65,13 @@ export function Footer() {
                 <GithubIcon className="w-4 h-4" />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/praveshgrewal"
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn Profile"
                 className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#0077B5] hover:border-[#0077B5] transition-all"
               >
                 <LinkedinIcon className="w-4 h-4" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Twitter Profile"
-                className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all"
-              >
-                <TwitterIcon className="w-4 h-4" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="YouTube Channel"
-                className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-red-500 hover:border-red-500 transition-all"
-              >
-                <YoutubeIcon className="w-4 h-4" />
               </a>
               <a
                 href="mailto:contact@praveshvibes.com"

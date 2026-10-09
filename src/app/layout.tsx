@@ -60,8 +60,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "PraveshVibes — I Teach Technology. I Build What's Next.",
-    description: "Explore projects, free student notes, and technical articles across AI, Data, and Cybersecurity.",
-    creator: "@praveshvibes"
+    description: "Explore projects, free student notes, and technical articles across AI, Data, and Cybersecurity."
   },
   robots: {
     index: true,

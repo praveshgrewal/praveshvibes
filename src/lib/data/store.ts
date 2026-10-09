@@ -83,15 +83,49 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     }
   }
 
+  if (typeof window === 'undefined') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const file = path.join(process.cwd(), 'data', 'settings.json');
+      if (fs.existsSync(file)) {
+        const raw = fs.readFileSync(file, 'utf-8');
+        return JSON.parse(raw);
+      }
+    } catch {
+      // fallback to initialSiteSettings
+    }
+    return initialSiteSettings;
+  }
+
   const stored = getLocal<SiteSettings>(STORAGE_KEYS.SETTINGS, initialSiteSettings);
-  if (stored && (stored.avatar_url.includes('images.unsplash.com/photo-1534528741775-53994a69daeb') || !stored.portrait_url)) {
-    const updated = {
-      ...stored,
-      avatar_url: stored.avatar_url.includes('images.unsplash.com/photo-1534528741775-53994a69daeb') ? initialSiteSettings.avatar_url : stored.avatar_url,
-      portrait_url: stored.portrait_url || initialSiteSettings.portrait_url
-    };
-    setLocal(STORAGE_KEYS.SETTINGS, updated);
-    return updated;
+  if (stored) {
+    let changed = false;
+    const updated = { ...stored };
+
+    // Migrate from old unsplash avatar
+    if (stored.avatar_url && stored.avatar_url.includes('images.unsplash.com/photo-1534528741775-53994a69daeb')) {
+      updated.avatar_url = initialSiteSettings.avatar_url;
+      changed = true;
+    }
+    if (!stored.portrait_url) {
+      updated.portrait_url = initialSiteSettings.portrait_url;
+      changed = true;
+    }
+    // Migrate default github if still generic
+    if (stored.github_url === 'https://github.com') {
+      updated.github_url = initialSiteSettings.github_url;
+      changed = true;
+    }
+    if (stored.linkedin_url === 'https://linkedin.com') {
+      updated.linkedin_url = initialSiteSettings.linkedin_url;
+      changed = true;
+    }
+
+    if (changed) {
+      setLocal(STORAGE_KEYS.SETTINGS, updated);
+      return updated;
+    }
   }
   return stored;
 }
@@ -105,7 +139,30 @@ export async function updateSiteSettings(settings: SiteSettings): Promise<SiteSe
       console.warn('Supabase update failed, fallback to local', e);
     }
   }
-  setLocal(STORAGE_KEYS.SETTINGS, settings);
+
+  if (typeof window !== 'undefined') {
+    setLocal(STORAGE_KEYS.SETTINGS, settings);
+    try {
+      await fetch('/api/settings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(settings)
+      });
+    } catch (e) {
+      console.warn('Failed to sync settings with server API', e);
+    }
+  } else {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const dir = path.join(process.cwd(), 'data');
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      fs.writeFileSync(path.join(dir, 'settings.json'), JSON.stringify(settings, null, 2), 'utf-8');
+    } catch (e) {
+      console.warn('Failed to write settings file on server', e);
+    }
+  }
+
   return settings;
 }
 

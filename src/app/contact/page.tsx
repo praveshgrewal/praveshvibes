@@ -12,7 +12,7 @@ import {
   CheckCircle2,
   Calendar
 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from '@/components/ui/SocialIcons';
+import { GithubIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
 
 export const metadata: Metadata = {
   title: 'Contact & Project Inquiries',
@@ -109,24 +109,6 @@ export default async function ContactPage() {
                   className="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#0077B5] hover:border-[#0077B5] transition-all"
                 >
                   <LinkedinIcon className="w-4 h-4" />
-                </a>
-                <a
-                  href={settings.twitter_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Twitter/X"
-                  className="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all"
-                >
-                  <TwitterIcon className="w-4 h-4" />
-                </a>
-                <a
-                  href={settings.youtube_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="YouTube"
-                  className="w-10 h-10 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-red-500 hover:border-red-500 transition-all"
-                >
-                  <YoutubeIcon className="w-4 h-4" />
                 </a>
               </div>
             </div>

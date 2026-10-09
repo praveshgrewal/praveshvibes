@@ -13,7 +13,7 @@ import {
   Cpu,
   BarChart2
 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from '@/components/ui/SocialIcons';
+import { GithubIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
 import { SiteSettings } from '@/types';
 
 interface HeroProps {
@@ -138,7 +138,7 @@ export function Hero({ settings }: HeroProps) {
               {/* Social URLs */}
               <div className="flex items-center gap-2">
                 <a
-                  href={settings?.github_url || "https://github.com"}
+                  href={settings?.github_url || "https://github.com/praveshgrewal"}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="GitHub"
@@ -147,31 +147,13 @@ export function Hero({ settings }: HeroProps) {
                   <GithubIcon className="w-4 h-4" />
                 </a>
                 <a
-                  href={settings?.linkedin_url || "https://linkedin.com"}
+                  href={settings?.linkedin_url || "https://linkedin.com/in/praveshgrewal"}
                   target="_blank"
                   rel="noreferrer"
                   aria-label="LinkedIn"
                   className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#0077B5] hover:border-[#0077B5] transition-all"
                 >
                   <LinkedinIcon className="w-4 h-4" />
-                </a>
-                <a
-                  href={settings?.twitter_url || "https://twitter.com"}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="Twitter"
-                  className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-[#1DA1F2] hover:border-[#1DA1F2] transition-all"
-                >
-                  <TwitterIcon className="w-4 h-4" />
-                </a>
-                <a
-                  href={settings?.youtube_url || "https://youtube.com"}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label="YouTube"
-                  className="w-9 h-9 rounded-xl glass-panel flex items-center justify-center text-[var(--muted-text)] hover:text-red-500 hover:border-red-500 transition-all"
-                >
-                  <YoutubeIcon className="w-4 h-4" />
                 </a>
               </div>
             </div>

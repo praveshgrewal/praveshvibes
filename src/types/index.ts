@@ -29,8 +29,8 @@ export interface SiteSettings {
   email: string;
   github_url: string;
   linkedin_url: string;
-  twitter_url: string;
-  youtube_url: string;
+  twitter_url?: string;
+  youtube_url?: string;
   location: string;
   available_for_hire: boolean;
   years_experience?: number;

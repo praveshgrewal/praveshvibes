@@ -22,7 +22,7 @@ import {
   Layers,
   BookOpen
 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, TwitterIcon, YoutubeIcon } from '@/components/ui/SocialIcons';
+import { GithubIcon, LinkedinIcon } from '@/components/ui/SocialIcons';
 
 export const metadata: Metadata = {
   title: 'About & Technical Expertise',
@@ -143,24 +143,6 @@ export default async function AboutPage() {
             >
               <LinkedinIcon className="w-4 h-4 text-[#0077B5]" />
               <span>LinkedIn</span>
-            </a>
-            <a
-              href={settings.twitter_url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold glass-panel glass-panel-hover text-[var(--foreground)]"
-            >
-              <TwitterIcon className="w-4 h-4 text-[#1DA1F2]" />
-              <span>Twitter/X</span>
-            </a>
-            <a
-              href={settings.youtube_url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold glass-panel glass-panel-hover text-[var(--foreground)]"
-            >
-              <YoutubeIcon className="w-4 h-4 text-red-500" />
-              <span>YouTube</span>
             </a>
             <Link
               href="/contact"

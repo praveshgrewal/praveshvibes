@@ -1,7 +1,7 @@
 -- Seed data for PraveshVibes
 
 INSERT INTO site_settings (
-    id, name, tagline, bio, avatar_url, email, github_url, linkedin_url, twitter_url, youtube_url, location, available_for_hire, years_experience, students_trained_estimate
+    id, name, tagline, bio, avatar_url, email, github_url, linkedin_url, location, available_for_hire, years_experience, students_trained_estimate
 ) VALUES (
     'primary',
     'Pravesh Grewal',
@@ -9,10 +9,8 @@ INSERT INTO site_settings (
     'Technology educator, Data Science & AI practitioner, and cybersecurity enthusiast dedicated to demystifying complex technical disciplines. Building high-impact digital solutions and empowering students and engineering teams globally.',
     '/images/pravesh-avatar.png',
     'contact@praveshvibes.com',
-    'https://github.com',
-    'https://linkedin.com',
-    'https://twitter.com',
-    'https://youtube.com',
+    'https://github.com/praveshgrewal',
+    'https://linkedin.com/in/praveshgrewal',
     'New Delhi, India (Available Worldwide)',
     true,
     5,
