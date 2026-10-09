@@ -401,6 +401,34 @@ export async function getInquiries(): Promise<ContactInquiry[]> {
       // Fallback
     }
   }
+
+  if (typeof window === 'undefined') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const file = path.join(process.cwd(), 'data', 'inquiries.json');
+      if (fs.existsSync(file)) {
+        const raw = fs.readFileSync(file, 'utf-8');
+        return JSON.parse(raw);
+      }
+    } catch {
+      // fallback
+    }
+    return sampleInquiries;
+  }
+
+  // On client, fetch from API for real-time fresh server data
+  try {
+    const res = await fetch('/api/inquiries', { cache: 'no-store' });
+    if (res.ok) {
+      const list = await res.json();
+      setLocal(STORAGE_KEYS.INQUIRIES, list);
+      return list;
+    }
+  } catch (e) {
+    console.warn('Failed to fetch /api/inquiries, falling back to local', e);
+  }
+
   return getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
 }
 
@@ -421,8 +449,30 @@ export async function saveInquiry(inquiry: Omit<ContactInquiry, 'id' | 'created_
     }
   }
 
-  const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
-  setLocal(STORAGE_KEYS.INQUIRIES, [newRecord, ...all]);
+  if (typeof window === 'undefined') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const dir = path.join(process.cwd(), 'data');
+      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+      const file = path.join(dir, 'inquiries.json');
+      let existing: ContactInquiry[] = [];
+      if (fs.existsSync(file)) {
+        try {
+          existing = JSON.parse(fs.readFileSync(file, 'utf-8'));
+        } catch {
+          existing = sampleInquiries;
+        }
+      }
+      fs.writeFileSync(file, JSON.stringify([newRecord, ...existing], null, 2), 'utf-8');
+    } catch (e) {
+      console.warn('Failed to save inquiry to disk', e);
+    }
+  } else {
+    const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
+    setLocal(STORAGE_KEYS.INQUIRIES, [newRecord, ...all]);
+  }
+
   return newRecord;
 }
 
@@ -435,9 +485,34 @@ export async function updateInquiryStatus(id: string, status: ContactInquiry['st
       console.warn(e);
     }
   }
-  const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
-  const updated = all.map(inq => inq.id === id ? { ...inq, status } : inq);
-  setLocal(STORAGE_KEYS.INQUIRIES, updated);
+
+  if (typeof window !== 'undefined') {
+    try {
+      await fetch('/api/inquiries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status })
+      });
+    } catch (e) {
+      console.warn('Failed to patch /api/inquiries', e);
+    }
+    const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
+    const updated = all.map(inq => inq.id === id ? { ...inq, status } : inq);
+    setLocal(STORAGE_KEYS.INQUIRIES, updated);
+  } else {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const file = path.join(process.cwd(), 'data', 'inquiries.json');
+      if (fs.existsSync(file)) {
+        const list: ContactInquiry[] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+        const updated = list.map(inq => inq.id === id ? { ...inq, status } : inq);
+        fs.writeFileSync(file, JSON.stringify(updated, null, 2), 'utf-8');
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 }
 
 export async function deleteInquiry(id: string): Promise<void> {
@@ -449,8 +524,31 @@ export async function deleteInquiry(id: string): Promise<void> {
       console.warn(e);
     }
   }
-  const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
-  setLocal(STORAGE_KEYS.INQUIRIES, all.filter(inq => inq.id !== id));
+
+  if (typeof window !== 'undefined') {
+    try {
+      await fetch(`/api/inquiries?id=${id}`, {
+        method: 'DELETE'
+      });
+    } catch (e) {
+      console.warn('Failed to delete /api/inquiries', e);
+    }
+    const all = getLocal<ContactInquiry[]>(STORAGE_KEYS.INQUIRIES, sampleInquiries);
+    setLocal(STORAGE_KEYS.INQUIRIES, all.filter(inq => inq.id !== id));
+  } else {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const file = path.join(process.cwd(), 'data', 'inquiries.json');
+      if (fs.existsSync(file)) {
+        const list: ContactInquiry[] = JSON.parse(fs.readFileSync(file, 'utf-8'));
+        const updated = list.filter(inq => inq.id !== id);
+        fs.writeFileSync(file, JSON.stringify(updated, null, 2), 'utf-8');
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+  }
 }
 
 // --- TESTIMONIALS ---

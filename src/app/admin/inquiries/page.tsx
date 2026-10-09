@@ -14,19 +14,33 @@ import {
   Filter, 
   MessageSquare,
   Sparkles,
-  ExternalLink
+  ExternalLink,
+  RefreshCw
 } from 'lucide-react';
 
 export default function AdminInquiriesPage() {
   const [inquiries, setInquiries] = useState<ContactInquiry[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
   const [activeInquiry, setActiveInquiry] = useState<ContactInquiry | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const loadData = async () => {
-    const list = await getInquiries();
-    setInquiries(list);
-    if (list.length > 0 && !activeInquiry) {
-      setActiveInquiry(list[0]);
+    setLoading(true);
+    try {
+      const list = await getInquiries();
+      setInquiries(list);
+      if (list.length > 0) {
+        if (!activeInquiry) {
+          setActiveInquiry(list[0]);
+        } else {
+          const stillExists = list.find((i) => i.id === activeInquiry.id);
+          setActiveInquiry(stillExists || list[0]);
+        }
+      } else {
+        setActiveInquiry(null);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,16 +78,27 @@ export default function AdminInquiriesPage() {
     <div className="space-y-8">
       
       {/* Header */}
-      <div>
-        <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-pink)]">
-          Inbound Communications
-        </span>
-        <h1 className="text-2xl sm:text-3xl font-black text-[var(--foreground)] tracking-tight">
-          Client &amp; Student Inquiries
-        </h1>
-        <p className="text-xs sm:text-sm text-[var(--muted-text)]">
-          Review incoming project proposals, corporate training requests, and questions.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-[var(--accent-pink)]">
+            Inbound Communications
+          </span>
+          <h1 className="text-2xl sm:text-3xl font-black text-[var(--foreground)] tracking-tight">
+            Client &amp; Student Inquiries
+          </h1>
+          <p className="text-xs sm:text-sm text-[var(--muted-text)]">
+            Review incoming project proposals, corporate training requests, and questions.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={loadData}
+          disabled={loading}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold glass-panel glass-panel-hover text-[var(--foreground)] cursor-pointer self-start sm:self-auto disabled:opacity-50"
+        >
+          <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-[var(--primary)]' : ''}`} />
+          <span>{loading ? 'Refreshing...' : 'Refresh Inquiries'}</span>
+        </button>
       </div>
 
       {/* Filter Tabs */}

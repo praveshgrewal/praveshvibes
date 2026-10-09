@@ -1,0 +1,22 @@
+[
+  {
+    "id": "inq-1",
+    "name": "Alex Vance",
+    "email": "alex@techventure.io",
+    "subject": "Enterprise RAG Pipeline Consultation",
+    "service_category": "AI & Generative AI Applications",
+    "message": "Hi Pravesh, we are looking to build a private RAG pipeline on top of our engineering documentation. Would love to discuss scope, timeline, and deliverables.",
+    "status": "new",
+    "created_at": "2026-10-01T10:00:00Z"
+  },
+  {
+    "id": "inq-2",
+    "name": "Priya Nair",
+    "email": "priya.nair@analyticsfirm.com",
+    "subject": "Power BI Executive Dashboard Setup",
+    "service_category": "Data Analytics & Dashboards",
+    "message": "We need automated ETL from Snowflake into clean executive Power BI reports for our Q3 board meeting.",
+    "status": "replied",
+    "created_at": "2026-09-28T14:30:00Z"
+  }
+]
