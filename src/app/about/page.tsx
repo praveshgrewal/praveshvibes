@@ -79,9 +79,9 @@ export default async function AboutPage() {
           <div className="relative w-full max-w-sm aspect-[4/5] rounded-3xl p-2 glass-panel border-2 border-[var(--glass-border)] shadow-2xl">
             <div className="w-full h-full rounded-2xl overflow-hidden relative bg-slate-900">
               <img
-                src={settings.avatar_url}
+                src={settings.portrait_url || settings.avatar_url || "/images/pravesh-portrait.png"}
                 alt={settings.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-top"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
               <div className="absolute bottom-4 left-4 right-4 text-white">

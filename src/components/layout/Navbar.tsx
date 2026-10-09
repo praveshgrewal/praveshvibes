@@ -63,17 +63,19 @@ export function Navbar() {
             href="/" 
             className="group flex items-center gap-2.5 text-xl font-bold tracking-tight text-[var(--foreground)]"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--primary)] via-[var(--secondary)] to-[var(--accent-pink)] p-[2px] shadow-sm transition-transform group-hover:scale-105">
-              <div className="w-full h-full bg-[var(--card-bg)] rounded-[10px] flex items-center justify-center">
-                <span className="gradient-text font-black text-lg">P</span>
-              </div>
+            <div className="relative w-9 h-9 rounded-xl overflow-hidden ring-2 ring-[var(--primary)]/40 group-hover:ring-[var(--primary)] shadow-xs transition-all shrink-0">
+              <img
+                src="/images/pravesh-avatar.png"
+                alt="Pravesh Grewal"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
             </div>
             <div className="flex flex-col">
               <span className="leading-none text-lg font-black tracking-tight">
                 Pravesh<span className="text-[var(--secondary)]">Vibes</span>
               </span>
               <span className="text-[9px] tracking-widest uppercase font-semibold text-[var(--subtle-text)] mt-0.5">
-                Tech & AI Studio
+                Tech &amp; AI Studio
               </span>
             </div>
           </Link>

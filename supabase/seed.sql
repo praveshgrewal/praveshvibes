@@ -7,7 +7,7 @@ INSERT INTO site_settings (
     'Pravesh Grewal',
     'I Teach Technology. I Build What''s Next.',
     'Technology educator, Data Science & AI practitioner, and cybersecurity enthusiast dedicated to demystifying complex technical disciplines. Building high-impact digital solutions and empowering students and engineering teams globally.',
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&auto=format&fit=crop&q=80',
+    '/images/pravesh-avatar.png',
     'contact@praveshvibes.com',
     'https://github.com',
     'https://linkedin.com',

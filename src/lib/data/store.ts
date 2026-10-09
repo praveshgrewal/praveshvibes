@@ -82,7 +82,18 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       // Fallback
     }
   }
-  return getLocal<SiteSettings>(STORAGE_KEYS.SETTINGS, initialSiteSettings);
+
+  const stored = getLocal<SiteSettings>(STORAGE_KEYS.SETTINGS, initialSiteSettings);
+  if (stored && (stored.avatar_url.includes('images.unsplash.com/photo-1534528741775-53994a69daeb') || !stored.portrait_url)) {
+    const updated = {
+      ...stored,
+      avatar_url: stored.avatar_url.includes('images.unsplash.com/photo-1534528741775-53994a69daeb') ? initialSiteSettings.avatar_url : stored.avatar_url,
+      portrait_url: stored.portrait_url || initialSiteSettings.portrait_url
+    };
+    setLocal(STORAGE_KEYS.SETTINGS, updated);
+    return updated;
+  }
+  return stored;
 }
 
 export async function updateSiteSettings(settings: SiteSettings): Promise<SiteSettings> {

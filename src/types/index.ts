@@ -25,6 +25,7 @@ export interface SiteSettings {
   tagline: string;
   bio: string;
   avatar_url: string;
+  portrait_url?: string;
   email: string;
   github_url: string;
   linkedin_url: string;

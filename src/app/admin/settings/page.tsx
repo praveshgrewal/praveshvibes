@@ -112,26 +112,65 @@ export default function AdminSettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">Avatar / Portrait Photo URL</label>
-              <input
-                type="url"
-                required
-                value={settings.avatar_url}
-                onChange={(e) => setSettings({ ...settings, avatar_url: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
-              />
+              <label className="text-xs font-bold text-[var(--subtle-text)] flex items-center justify-between">
+                <span>Avatar Photo URL (Close-up)</span>
+                {settings.avatar_url && (
+                  <span className="text-[10px] text-[var(--secondary)] font-normal">Active</span>
+                )}
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  required
+                  value={settings.avatar_url}
+                  onChange={(e) => setSettings({ ...settings, avatar_url: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
+                />
+                {settings.avatar_url && (
+                  <img
+                    src={settings.avatar_url}
+                    alt="Avatar preview"
+                    className="w-10 h-10 rounded-xl object-cover shrink-0 border border-[var(--glass-border)]"
+                  />
+                )}
+              </div>
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[var(--subtle-text)]">Contact Email</label>
-              <input
-                type="email"
-                required
-                value={settings.email}
-                onChange={(e) => setSettings({ ...settings, email: e.target.value })}
-                className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
-              />
+              <label className="text-xs font-bold text-[var(--subtle-text)] flex items-center justify-between">
+                <span>About Portrait URL (Full/Standing)</span>
+                {settings.portrait_url && (
+                  <span className="text-[10px] text-[var(--secondary)] font-normal">Active</span>
+                )}
+              </label>
+              <div className="flex gap-2 items-center">
+                <input
+                  type="text"
+                  value={settings.portrait_url || ''}
+                  placeholder="/images/pravesh-portrait.png"
+                  onChange={(e) => setSettings({ ...settings, portrait_url: e.target.value })}
+                  className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
+                />
+                {settings.portrait_url && (
+                  <img
+                    src={settings.portrait_url}
+                    alt="Portrait preview"
+                    className="w-10 h-10 rounded-xl object-cover shrink-0 border border-[var(--glass-border)]"
+                  />
+                )}
+              </div>
             </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-[var(--subtle-text)]">Contact Email</label>
+            <input
+              type="email"
+              required
+              value={settings.email}
+              onChange={(e) => setSettings({ ...settings, email: e.target.value })}
+              className="w-full px-3.5 py-2.5 rounded-xl text-sm bg-[var(--surface-alt)] border border-[var(--glass-border)] text-[var(--foreground)] focus:ring-2 focus:ring-[var(--primary)] outline-none"
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

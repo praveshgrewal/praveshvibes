@@ -38,9 +38,13 @@ export function Hero({ settings }: HeroProps) {
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             
             {/* Top Pill / Badge */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-xs sm:text-sm font-semibold text-[var(--foreground)] shadow-xs mx-auto lg:mx-0">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full glass-panel text-xs sm:text-sm font-semibold text-[var(--foreground)] shadow-xs mx-auto lg:mx-0">
+              <img
+                src={settings?.avatar_url || "/images/pravesh-avatar.png"}
+                alt="Pravesh Grewal"
+                className="w-6 h-6 rounded-full object-cover ring-2 ring-[var(--primary)] shrink-0"
+              />
               <span className="flex h-2 w-2 rounded-full bg-[var(--accent-green)] animate-ping" />
-              <Sparkles className="w-4 h-4 text-[var(--primary)]" />
               <span>Technology Educator &amp; Full-Stack AI Engineer</span>
             </div>
 
