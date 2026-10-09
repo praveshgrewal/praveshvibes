@@ -140,3 +140,4 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - [x] PostgreSQL SQL migrations and RLS policies.
 - [x] Dynamic sitemap.ts and robots.txt.
 - [x] `npm run build` passes with zero errors.
+# praveshvibes
